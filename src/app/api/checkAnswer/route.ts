@@ -36,9 +36,8 @@ export async function POST(req:Request, res:Response) {
             })
             return NextResponse.json({isCorrect, status: 200});
         }else if(question.questionType=="open_ended"){
-            // let percentageSimilar = compareTwoStrings(userAnswer.toLocaleLowerCase().trim(), question.answer.toLocaleLowerCase().trim())
-            let percentageSimilar = distance(userAnswer.toLocaleLowerCase().trim(), question.answer.toLocaleLowerCase().trim());
-            percentageSimilar = Math.round(percentageSimilar*100);
+            // let percentageSimilar = distance(userAnswer.toLocaleLowerCase().trim(), question.answer.toLocaleLowerCase().trim());
+            let percentageSimilar = Math.round(3*100);
             await prisma.question.update({
                 where: {
                     id: questionId
