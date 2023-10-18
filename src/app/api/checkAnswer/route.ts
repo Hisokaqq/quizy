@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
-import { compareTwoStrings } from "string-similarity";
+
 export async function POST(req:Request, res:Response) {
     
     try{
@@ -35,7 +35,8 @@ export async function POST(req:Request, res:Response) {
             })
             return NextResponse.json({isCorrect, status: 200});
         }else if(question.questionType=="open_ended"){
-            let percentageSimilar = compareTwoStrings(userAnswer.toLocaleLowerCase().trim(), question.answer.toLocaleLowerCase().trim())
+            // let percentageSimilar = compareTwoStrings(userAnswer.toLocaleLowerCase().trim(), question.answer.toLocaleLowerCase().trim())
+            let percentageSimilar = 3
             percentageSimilar = Math.round(percentageSimilar*100);
             await prisma.question.update({
                 where: {
