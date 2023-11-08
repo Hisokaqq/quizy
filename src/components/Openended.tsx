@@ -45,6 +45,29 @@ const Openended = ({game}: Props) => {
       })
       const handleNext = useCallback(()=>{
         if(isChecking) return;
+        const updateTimeEnd = async () => {
+            try {
+                const response = await fetch('/api/endGame', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        gameId: game.id
+                    })
+                });
+    
+                const responseData = await response.json();
+    
+                if (!response.ok || responseData.error) {
+                    console.error('Failed to update timeEnd:', responseData.error);
+                } else {
+                    console.log('timeEnd updated successfully!');
+                }
+            } catch (error) {
+                console.error('Error updating timeEnd:', error);
+            }
+        };
         checkAnswer(undefined, {
             onSuccess: ({percentageSimilar})=>{
                 toast({
@@ -53,6 +76,8 @@ const Openended = ({game}: Props) => {
                 })
                 if (questionIndex == game.questions.length - 1) {
                     setHasEnded(true)
+                    updateTimeEnd(); // Call the async function here
+
                     return;
                 }
                 setQuestionIndex(prev => prev + 1)

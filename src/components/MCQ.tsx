@@ -32,6 +32,7 @@ const MCQ = ({game}: Props) => {
             if(!hasEnded) setNow(new Date());
             
             
+            
         }, 1000)
         return () => {
             clearInterval(interval)
@@ -61,36 +62,61 @@ const MCQ = ({game}: Props) => {
         }
       })
 
-      const handleNext = useCallback(()=>{
-        if(isChecking) return;
+      const handleNext = useCallback(() => {
+        if (isChecking) return;
+    
+        const updateTimeEnd = async () => {
+            try {
+                const response = await fetch('/api/endGame', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        gameId: game.id
+                    })
+                });
+    
+                const responseData = await response.json();
+    
+                if (!response.ok || responseData.error) {
+                    console.error('Failed to update timeEnd:', responseData.error);
+                } else {
+                    console.log('timeEnd updated successfully!');
+                }
+            } catch (error) {
+                console.error('Error updating timeEnd:', error);
+            }
+        };
+    
         checkAnswer(undefined, {
-            onSuccess: ({isCorrect})=>{
-                if(isCorrect){
+            onSuccess: ({ isCorrect }) => {
+                if (isCorrect) {
                     toast({
                         title: "Correct!",
                         description: "You got it right!",
                         variant: "success"
-                    })
+                    });
                     setCorrectAnswers(prev => prev + 1);
-                }else{
+                } else {
                     toast({
                         title: "Wrong!",
                         description: "You got it wrong!",
                         variant: "destructive"
-                    })
+                    });
                     setWrongAnswers(prev => prev + 1);
                 }
                 if (questionIndex == game.questions.length - 1) {
-                    
-                    setHasEnded(true)
+                    setHasEnded(true);
+                    updateTimeEnd(); // Call the async function here
                     return;
                 }
-                setSelectedChoice(null)
-                setQuestionIndex(prev => prev + 1)
-
+                setSelectedChoice(null);
+                setQuestionIndex(prev => prev + 1);
             }
-        })
-      }, [checkAnswer, toast, isChecking, questionIndex, game.questions.length])
+        });
+    }, [checkAnswer, toast, isChecking, questionIndex, game.questions.length]);
+    
 
       useEffect(()=>{
         const handleKeyDown = (event: KeyboardEvent) => {
