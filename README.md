@@ -10,27 +10,6 @@ NextQuiz is an interactive quiz application powered by Next.js and leverages the
 - **Responsive Design**: A modern interface that adapts to mobile and desktop devices.
 - **Social Sharing**: Share your quiz results with friends on social media platforms.
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-### Prerequisites
-- Node.js 14 or newer
-- Next.js 10 or newer
 
 ![](images/main.png)
 ![](images/game1.png)
